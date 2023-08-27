@@ -1,13 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-{% if user.is_authenticated %}
-    <form method="post" action="{% url 'index' %}">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit" class="btn btn-primary">Post</button>
-    </form>
-{% endif %}
+
 {% for post in posts %}
 <div class="posts">
 <a href='{% url 'profile' post.creater.id %}'><h4>{{post.creater}}</h4></a>

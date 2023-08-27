@@ -1,0 +1,37 @@
+.btn{
+    margin-left: 10px;
+}
+
+.form-control{
+    margin: 10px;
+    width: 50%;
+}
+
+.posts{
+    display : flex;
+    flex-direction: column;
+    padding : 0px 5px;
+    border : 1px solid lightgray;
+    margin : 10px;
+}
+
+.pagination{
+    display : flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.user_name{
+    display : flex;
+    justify-content: center;
+    flex-direction: row;
+    margin: 10px;
+    font-family: initial;
+    font-size: 30px;
+}
+
+#foll{
+    display : flex;
+    flex-direction: row;
+    justify-content: center;
+}

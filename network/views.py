@@ -3,12 +3,35 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from .forms import PostForm
+from django.core.paginator import Paginator
 
-from .models import User
+from .models import User, Post, Follow
 
 
 def index(request):
-    return render(request, "network/index.html")
+    if request.method=="POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.creater = request.user
+            post.save()
+            return HttpResponseRedirect( reverse("index"))
+        else:
+            return render(request, "network/index.html", {
+                "form": form,
+                "message": "Enter valid details"
+                })
+    else:
+        form = PostForm()
+        all_posts = Post.objects.all().order_by('time').reverse()
+        p = Paginator(all_posts, 10)
+        page_no = request.GET.get('page')
+        posts = p.get_page(page_no)
+        return render(request, "network/index.html", {
+                "form" : form,
+                "posts": posts,
+            })
 
 
 def login_view(request):
@@ -61,3 +84,63 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+def profile(request, id):
+    u = User.objects.get(pk = id)
+    user = request.user
+    same = u == user
+    all_posts = Post.objects.filter(creater = u).order_by('time').reverse()
+    p = Paginator(all_posts, 10)
+    page_no = request.GET.get('page')
+    posts = p.get_page(page_no)
+    fowings = Follow.objects.filter(following = id)
+    fowers = Follow.objects.filter(me = id)
+    if Follow.objects.filter(following = u, me = user):
+        s = True
+    else:
+        s = False
+    return render(request, "network/profile.html", {
+            "posts": posts,
+            "usr" : u,
+            'fg' : fowings,
+            'fr' : fowers,
+            'u' : same,
+            's' : s
+        })
+    
+def follow(request, id):
+    i = request.user
+    u = User.objects.get(pk = id)
+    if Follow.objects.filter(following = u, me =i):
+        print('already following')
+    else:
+        f = Follow(following = u, me = i)
+        f.save()
+    return HttpResponseRedirect(reverse('profile', args=(id, )))
+
+def unfollow(request, id):
+    i = request.user
+    u = User.objects.get(pk = id)
+    f = Follow.objects.filter(following = u, me = i)
+    f.delete()
+    return HttpResponseRedirect(reverse('profile', args=(id, )))
+
+def following(request):
+    follng = Follow.objects.filter(me = request.user)
+    all_posts = Post.objects.all().order_by('time').reverse()
+    f_list = []
+    for post in all_posts:
+        for per in follng:
+            if post.creater == per.following:
+                f_list.append(post)
+    p = Paginator(f_list, 10)
+    page_no = request.GET.get('page')
+    posts = p.get_page(page_no)
+    return render(request, "network/following.html", {
+            "posts": posts,
+        })
+    
+
+def delete(request, id):
+    Post.objects.filter(pk = id).delete()
+    return HttpResponseRedirect(reverse('index'))
