@@ -7,9 +7,21 @@
 <a href='{% url 'profile' post.creater.id %}'><h4>{{post.creater}}</h4></a>
 <h5>{{post.content}}</h5>
 <p>{{post.time}}</p>
-<p><b>{{post.liked.count}}</b></p>
+<div class = 'd-flex justify-content-flex-start'>
+<i style="font-size:16px" class="fa">&#xf087;</i><b><p id='count_{{post.id}}'>{{post.liked.count}}</p></b></li>
+
+{% if user.is_authenticated %}
+{% if post in liked %}
+  <button class="btn btn-danger fa fa-thumbs-down col-1" id='btn_{{ post.id}}' onclick="likeHandler({{post.id}},{{p_id}})"></button>
+{% else %}
+  <button class="btn btn-success fa fa-thumbs-up col-1" id='btn_{{ post.id}}' onclick="likeHandler({{post.id}},{{p_id}})"></button>
+{% endif %}
+{% endif %}
+<a style='margin-left:10px' href='{% url 'readcomms' post.id %}' id='comm_a{{post.id}}'>Comments</a>
+</div>
 </div>
 {% endfor %}
+
 
 <nav aria-label="Page navigation example">
     <ul class="pagination">

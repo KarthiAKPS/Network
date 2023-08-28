@@ -1,5 +1,5 @@
 .btn{
-    margin-left: 10px;
+    margin: 0 10px 10px;
 }
 
 .form-control{
@@ -34,4 +34,14 @@
     display : flex;
     flex-direction: row;
     justify-content: center;
+}
+
+#edit_btn{
+    display : flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+i{
+    margin : 5px;
 }
