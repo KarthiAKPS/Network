@@ -1,8 +1,25 @@
-var l;
-var z;
 var k = false;
+var l = false;
+var li = [];
+
+function varchange(){
+    k = false;
+}
 
 function likeHandler(id, liked){
+
+    if(li.length == 0 || li.length == 1){
+        li.unshift(id);
+    }
+
+    if (li.length == 2){
+    li.unshift(id);
+    li.pop();
+    }
+
+    if(li[0] != li[1]){
+        k = false;
+    }
 
     const btn = document.getElementById(`btn_${id}`);
     let cnt = document.getElementById(`count_${id}`).innerHTML;
@@ -16,36 +33,37 @@ function likeHandler(id, liked){
     btn.classList.remove('fa-thumbs-down');
 
     if(liked.indexOf(id)>=0){
-         z = true;
+         var z = true;
     }else{
-         z = false;
+         var z = false;
     }
+    
     if(k == true){
-    if(l == true){
-        fetch(`/unlike/${id}`)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-            cnt = cnt - parseInt('1');
-            document.getElementById(`count_${id}`).innerHTML = cnt;
-            btn.classList.add('btn-success');
-            btn.classList.add('fa-thumbs-up');
-            l = false;
-            k = true;
-        })
-    }else{
-        fetch(`/like/${id}`)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result)
-            cnt = cnt + parseInt('1');
-            document.getElementById(`count_${id}`).innerHTML = cnt;
-            btn.classList.add('btn-danger');
-            btn.classList.add('fa-thumbs-down');
-            l = true;
-            k = true;
-        })
-    }}else{
+        if(l == true){
+            fetch(`/unlike/${id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                cnt = cnt - parseInt('1');
+                document.getElementById(`count_${id}`).innerHTML = cnt;
+                btn.classList.add('btn-success');
+                btn.classList.add('fa-thumbs-up');
+                l = false;
+                k = true;
+            })
+        }else{
+            fetch(`/like/${id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                cnt = cnt + parseInt('1');
+                document.getElementById(`count_${id}`).innerHTML = cnt;
+                btn.classList.add('btn-danger');
+                btn.classList.add('fa-thumbs-down');
+                l = true;
+                k = true;
+            })
+        }}else{
         if(z == true){
             fetch(`/unlike/${id}`)
             .then(response => response.json())
@@ -71,6 +89,7 @@ function likeHandler(id, liked){
                 l = true;
             })}
     }
+    
 }
 
 function csrfToken(x){
