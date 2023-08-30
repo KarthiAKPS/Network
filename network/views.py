@@ -102,17 +102,14 @@ def profile(request, id):
     liked_posts = []
     posts_id = []
     
-    if user.is_authenticated:
-        for post in all_posts:
-            if user in post.liked.all():
-                liked_posts.append(post)
-                posts_id.append(post.id)
+    for post in all_posts:
+        if user in post.liked.all():
+            liked_posts.append(post)
+            posts_id.append(post.id)
     
     fowings = Follow.objects.filter(following = id)
     fowers = Follow.objects.filter(me = id)
     
-    s = True
-    print(user)
     if user.is_authenticated:
         if Follow.objects.filter(following = u, me = user):
             s = True
@@ -126,7 +123,8 @@ def profile(request, id):
             'fr' : fowers,
             'u' : same,
             's' : s,
-            'p_id' : posts_id
+            'p_id' : posts_id,
+            'liked' : liked_posts
         })
     
 def follow(request, id):
