@@ -101,17 +101,24 @@ def profile(request, id):
     
     liked_posts = []
     posts_id = []
-    for post in all_posts:
-        if user in post.liked.all():
-            liked_posts.append(post)
-            posts_id.append(post.id)
+    
+    if user.is_authenticated:
+        for post in all_posts:
+            if user in post.liked.all():
+                liked_posts.append(post)
+                posts_id.append(post.id)
     
     fowings = Follow.objects.filter(following = id)
     fowers = Follow.objects.filter(me = id)
-    if Follow.objects.filter(following = u, me = user):
-        s = True
-    else:
-        s = False
+    
+    s = True
+    print(user)
+    if user.is_authenticated:
+        if Follow.objects.filter(following = u, me = user):
+            s = True
+        else:
+            s = False
+            
     return render(request, "network/profile.html", {
             "posts": posts,
             "usr" : u,

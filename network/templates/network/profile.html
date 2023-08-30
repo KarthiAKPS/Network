@@ -3,6 +3,7 @@
 {% block body %}
 
 <div class='user_name'>{{usr}}
+{% if user.is_authenticated %}
 {% if u == False and s == False %}
 <form action='{% url 'follow' usr.id %}' method='post'>
     {% csrf_token %}
@@ -18,6 +19,7 @@
         <button class='btn btn-danger'>Unfollow</button>
     </div>
 </form>
+{% endif %}
 {% endif %}
 </div>
 <div id='foll'>
