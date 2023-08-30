@@ -110,6 +110,7 @@ def profile(request, id):
     fowings = Follow.objects.filter(following = id)
     fowers = Follow.objects.filter(me = id)
     
+    s = True
     if user.is_authenticated:
         if Follow.objects.filter(following = u, me = user):
             s = True
