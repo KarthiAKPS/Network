@@ -11,6 +11,7 @@ class Post(models.Model):
     content = models.CharField(max_length=255)
     liked = models.ManyToManyField(User, related_name='liked_users_or_post' ,blank=True, null=True)
     time = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(null=True, blank=True, upload_to='images/')
     
     def __str__(self):
         return f"{self.creater} posted {self.content}"

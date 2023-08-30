@@ -15,6 +15,10 @@
     margin : 10px;
 }
 
+#p{
+    display:flex;
+}
+
 .pagination{
     display : flex;
     flex-direction: row;
@@ -44,4 +48,16 @@
 
 i{
     margin : 5px;
+}
+
+#p{
+    display : flex;
+}
+
+img{
+    margin: 20px 0 20px;
+}
+
+#c{
+    margin: 20px 0 0;
 }

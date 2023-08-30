@@ -7,14 +7,16 @@ class PostForm(forms.ModelForm):
     
     class Meta:
         model = Post
-        fields = ('content','liked', 'creater')
+        fields = ('content','liked', 'creater', 'image')
         widgets = {
             'content' : forms.Textarea(attrs={'placeholder':'Write your mind here...','class':'form-control', 'rows':'3'}),
             'liked' : forms.HiddenInput(),
             'creater' : forms.HiddenInput(),
+            'image' : forms.FileInput(attrs={'class':'form-control-file', 'style':'margin : 0 10px 0'}),
         }
         labels = {
-            'content' : ''
+            'content' : '',
+            'image' : ''
         }
         
     def __init__(self,*args, **kwargs):

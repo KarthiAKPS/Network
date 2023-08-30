@@ -10,7 +10,7 @@ from .models import User, Post, Follow, Comment
 
 def index(request):
     if request.method=="POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.creater = request.user
@@ -98,6 +98,14 @@ def profile(request, id):
     p = Paginator(all_posts, 10)
     page_no = request.GET.get('page')
     posts = p.get_page(page_no)
+    
+    liked_posts = []
+    posts_id = []
+    for post in all_posts:
+        if user in post.liked.all():
+            liked_posts.append(post)
+            posts_id.append(post.id)
+    
     fowings = Follow.objects.filter(following = id)
     fowers = Follow.objects.filter(me = id)
     if Follow.objects.filter(following = u, me = user):
@@ -110,7 +118,8 @@ def profile(request, id):
             'fg' : fowings,
             'fr' : fowers,
             'u' : same,
-            's' : s
+            's' : s,
+            'p_id' : posts_id
         })
     
 def follow(request, id):
@@ -145,7 +154,7 @@ def following(request):
     user = request.user
     liked_posts = []
     posts_id = []
-    for post in all_posts:
+    for post in posts:
         if user in post.liked.all():
             liked_posts.append(post)
             posts_id.append(post.id)
@@ -215,11 +224,13 @@ def readcomms(request, id):
     i = Post.objects.get(pk = id)
     try:
         comms = Comment.objects.filter(commented = i)
-        return render(request, 'network/comment.html', {
-                                                    'i': id,
-                                                    'comms': comms})
+        return render(request, 'network/comment.html', 
+                      {
+                        'i': id,
+                        'comms': comms})
     except:
         message = "no comments"
-        return render(request, 'network/comment.html', {
-                                                    'i': id,
-                                                    'm': message})
+        return render(request, 'network/comment.html', 
+                      {
+                        'i': id,
+                        'm': message})

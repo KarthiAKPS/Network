@@ -2,10 +2,6 @@ var k = false;
 var l = false;
 var li = [];
 
-function varchange(){
-    k = false;
-}
-
 function likeHandler(id, liked){
 
     if(li.length == 0 || li.length == 1){
@@ -89,7 +85,6 @@ function likeHandler(id, liked){
                 l = true;
             })}
     }
-    
 }
 
 function csrfToken(x){

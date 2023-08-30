@@ -29,13 +29,33 @@
 
 {% for post in posts %}
 <div class="posts">
-<h5 id='content_{{post.id}}'>{{post.content}}</h5>
-<p>{{post.time}}</p>
-<p><b>{{post.liked.count}}</b></p>
+  <div id='p'>
+    {% if post.image %}
+    <div class="col-md-4">
+      <img src="{{post.image.url}}" class="img-fluid rounded-start">
+    </div>
+    {% endif %}
+    <div id='c'>
+      <h5>{{post.content}}</h5>
+      <p>{{post.time}}</p>
+    </div>
+  </div>
+
+  <div class = 'd-flex justify-content-flex-start'>
+    <i style="font-size:16px; margin-left:20px" class="fa">&#xf087;</i><b><p id='count_{{post.id}}'>{{post.liked.count}}</p></b></li>
+    {% if user.is_authenticated %}
+      {% if post in liked %}
+        <button style="width:40px" class="btn btn-danger fa fa-thumbs-down col-1" id='btn_{{ post.id}}' onclick="likeHandler({{post.id}},{{p_id}})"></button>
+      {% else %}
+        <button style="width:40px" class="btn btn-success fa fa-thumbs-up col-1" id='btn_{{ post.id}}' onclick="likeHandler({{post.id}},{{p_id}})"></button>
+      {% endif %}
+    {% endif %}
+    <a style='margin-left:10px' href='{% url 'readcomms' post.id %}' id='comm_a{{post.id}}'>Comments</a>
+    </div>
+
 {% if u %}
 <div id='edit_btn'>
 <button type='button' class="btn btn-warning" data-bs-toggle='modal' data-bs-target="#modal_{{post.id}}">Edit</button>
-
 <div class="modal fade" tabindex="-1" id="modal_{{post.id}}" aria-labelledby="modal_{{post.id}}Label" aria-hidden='true'>
     <div class="modal-dialog">
       <div class="modal-content">
