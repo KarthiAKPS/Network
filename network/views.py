@@ -126,7 +126,8 @@ def profile(request, id):
             'fr' : fowers,
             'u' : same,
             's' : s,
-            'p_id' : posts_id
+            'p_id' : posts_id,
+            'liked' : liked_posts
         })
     
 def follow(request, id):
